@@ -1,0 +1,27 @@
+
+
+[2026-03-19 16:06:00] Client version: 1773426366
+[2026-03-19 16:06:00] Failed to read store 'install' from 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\config\config.vdf.tmp'
+[2026-03-19 16:06:00] Failed to read store 'install' from 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\config\config.vdf.tmp'
+[2026-03-19 16:06:00] Failed to read store 'install' from 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\config\config.vdf.tmp'
+[2026-03-19 16:06:00] Failed to read store 'install' from 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\config\config.vdf.tmp'
+[2026-03-19 16:06:01] Flushed store 'install' to 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\config\config.vdf'
+[2026-03-19 16:06:01] Loaded store 'install' from 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\config\config.vdf' successfully
+[2026-03-19 16:06:04] Failed to read store 'userlocal' from 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\userdata\anonymous\config\localconfig.vdf.tmp'
+[2026-03-19 16:06:04] Flushed store 'install' to 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\config\config.vdf'
+[2026-03-19 16:06:06] Flushed store 'userlocal' to 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\userdata\anonymous\config\localconfig.vdf'
+[2026-03-19 16:06:12] Flushed store 'install' to 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\config\config.vdf'
+[2026-03-19 16:06:13] Flushed store 'userlocal' to 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\userdata\anonymous\config\localconfig.vdf'
+[2026-03-19 16:06:14] Flushed store 'userlocal' to 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\userdata\anonymous\config\localconfig.vdf'
+
+
+[2026-03-19 16:22:03] Client version: 1773426366
+[2026-03-19 16:22:03] Loaded store 'install' from 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\config\config.vdf' successfully
+[2026-03-19 16:22:03] Loaded store 'install' from 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\config\config.vdf' successfully
+[2026-03-19 16:22:03] Loaded store 'install' from 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\config\config.vdf' successfully
+[2026-03-19 16:22:03] Loaded store 'install' from 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\config\config.vdf' successfully
+[2026-03-19 16:22:04] Loaded store 'install' from 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\config\config.vdf' successfully
+[2026-03-19 16:22:06] Loaded store 'userlocal' from 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\userdata\anonymous\config\localconfig.vdf' successfully
+[2026-03-19 16:22:06] Flushed store 'install' to 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\config\config.vdf'
+[2026-03-19 16:22:08] Flushed store 'userlocal' to 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\userdata\anonymous\config\localconfig.vdf'
+[2026-03-19 16:22:09] Flushed store 'userlocal' to 'C:\Users\MONSTER\Desktop\PZPUBLISHER\tools\userdata\anonymous\config\localconfig.vdf'

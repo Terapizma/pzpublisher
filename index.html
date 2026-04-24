@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PZPUBLISHER v1.0.0</title>
+    <link rel="icon" type="image/png" href="pzpublisherlogo.ico">
+    <style>
+        :root {
+            --bg-dark: #070707; --bg-panel: #111111; --bg-hover: #1a1a1a;
+            --accent: #a00505; --accent-hover: #c00606; --text-main: #f0f0f0;
+            --text-muted: #808080; --border-color: #222222; --success: #00ff9d;
+            --info: #3ba55c; --star: #ffd700;
+        }
+        body.light-theme {
+            --bg-dark: #f0f2f5; --bg-panel: #ffffff; --bg-hover: #e4e6e9;
+            --text-main: #1c1e21; --text-muted: #65676b; --border-color: #ced0d4;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI Semibold', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { display: flex; height: 100vh; background-color: var(--bg-dark); color: var(--text-main); overflow: hidden; font-size: 14px; transition: background-color 0.3s, color 0.3s; }
+        .topbar { position: absolute; top: 0; right: 0; left: 230px; height: 60px; background-color: rgba(var(--bg-dark-rgb), 0.9); border-bottom: 1px solid var(--border-color); display: flex; justify-content: flex-end; align-items: center; padding: 0 25px; z-index: 10; backdrop-filter: blur(5px); }
+        .user-profile { display: flex; align-items: center; gap: 12px; }
+        .user-info { text-align: right; }
+        .user-name { font-weight: 700; font-size: 14px; color: var(--text-main); }
+        .user-status { font-size: 11px; color: var(--success); }
+        .user-avatar { width: 40px; height: 40px; border-radius: 4px; border: 1px solid var(--border-color); object-fit: cover; }
+        .logout-btn { background-color: var(--bg-hover); border: none; color: var(--text-muted); cursor: pointer; font-size: 11px; padding: 4px 8px; border-radius: 4px; font-weight: bold; text-transform: uppercase; margin-top: 3px; }
+        .logout-btn:hover { background-color: var(--accent); color: white; }
+        .sidebar { width: 230px; background-color: var(--bg-panel); display: flex; flex-direction: column; border-right: 1px solid var(--border-color); z-index: 11; transition: background-color 0.3s; }
+        .brand { padding: 20px 15px; border-bottom: 1px solid var(--border-color); text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px;}
+        .brand img { width: 35px; height: auto; }
+        .brand span { font-size: 18px; font-weight: 900; color: var(--accent); letter-spacing: 0.5px; text-transform: uppercase; font-style: italic;}
+        .brand small { font-size: 10px; color: var(--text-muted); font-style: normal; margin-left: 2px; }
+        .nav-items { flex: 1; padding: 15px 0; overflow-y: auto; }
+        .nav-item { padding: 12px 20px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; text-transform: uppercase; transition: 0.1s; color: var(--text-muted); border-left: 3px solid transparent; }
+        .nav-item:hover { background-color: var(--bg-hover); color: var(--text-main); }
+        .nav-item.active { border-left-color: var(--accent); color: var(--text-main); background-color: rgba(160, 5, 5, 0.08); }
+        .nav-icon { fill: currentColor; width: 18px; height: 18px; }
+        .content-wrapper { flex: 1; display: flex; flex-direction: column; position: relative; margin-left: 230px; width: calc(100% - 230px); }
+        .content-area { flex: 1; padding: 80px 30px 30px 30px; overflow-y: auto; background: var(--bg-dark); transition: background-color 0.3s;}
+        .tab-content { display: none; animation: fadeIn 0.2s ease; }
+        .tab-content.active { display: block; }
+        h2 { margin-bottom: 20px; font-weight: 800; font-size: 22px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .form-group { margin-bottom: 20px; position: relative; }
+        .form-group label { display: block; margin-bottom: 6px; color: var(--text-muted); font-size: 12px; text-transform: uppercase; font-weight: bold; }
+        input[type="text"], select, textarea { width: 100%; background-color: var(--bg-panel); border: 1px solid var(--border-color); color: var(--text-main); padding: 12px 14px; border-radius: 4px; outline: none; transition: 0.2s; }
+        input[type="text"]:focus, select:focus, textarea:focus { border-color: var(--accent); }
+        textarea { resize: vertical; min-height: 100px; }
+        .btn { background-color: var(--accent); color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase; white-space: nowrap;}
+        .btn:hover { background-color: var(--accent-hover); }
+        .btn-secondary { background-color: var(--bg-hover); color: var(--text-main); }
+        .btn-secondary:hover { background-color: var(--border-color); }
+        
+        .publish-layout { display: flex; gap: 30px; align-items: flex-start; }
+        .pub-left { flex: 0 0 250px; display: flex; flex-direction: column; gap: 15px; }
+        .pub-right { flex: 1; background: var(--bg-panel); padding: 25px; border-radius: 6px; border: 1px solid var(--border-color); }
+        .preview-box { width: 100%; aspect-ratio: 1/1; background: var(--bg-hover); border: 2px dashed var(--border-color); border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; position: relative; overflow: hidden; text-align: center; }
+        .preview-box:hover { border-color: var(--accent); background: rgba(160, 5, 5, 0.05); }
+        .preview-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; display: none; }
+        .preview-text { color: var(--text-muted); font-size: 13px; font-weight: bold; z-index: 1; pointer-events: none; }
+        .pub-action-row { display: flex; gap: 10px; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 20px;}
+        
+        .settings-row { display: flex; gap: 10px; align-items: center; }
+        .settings-card { background: var(--bg-panel); border: 1px solid var(--border-color); padding: 20px; border-radius: 6px; margin-bottom: 15px; }
+        .inline-alert { display: none; color: #ff4d4d; background: rgba(160, 5, 5, 0.1); border: 1px solid var(--accent); padding: 10px; border-radius: 4px; font-size: 12px; margin-top: 8px; }
+        .status-msg { margin-top: 12px; font-size: 13px; display: none; padding: 10px; border-radius: 4px; border-left: 3px solid; line-height: 1.5; }
+        .rich-dl-card { display: none; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-top: 15px; align-items: flex-start; gap: 15px; }
+        .rich-dl-img { width: 72px; height: 72px; border-radius: 4px; object-fit: cover; border: 1px solid var(--border-color); }
+        .rich-dl-info { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .rich-dl-header { display: flex; justify-content: space-between; align-items: center; }
+        .rich-dl-title { font-weight: 800; font-size: 15px; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 350px; }
+        .rich-dl-percent { font-size: 14px; font-weight: 900; color: var(--text-muted); }
+        .progress-bar-bg { width: 100%; height: 8px; background-color: var(--bg-hover); border-radius: 4px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; width: 0%; background-color: var(--accent); transition: width 0.3s; }
+        .progress-bar-fill.success { background-color: var(--success); }
+        .dl-controls { display: flex; gap: 8px; align-items: flex-start; }
+        .control-btn { background: var(--bg-hover); border: none; color: var(--text-main); border-radius: 4px; padding: 8px; cursor: pointer; width: 32px; height: 32px;}
+        .btn-open-folder { display: none; background: rgba(0, 255, 157, 0.1); color: var(--success); border: 1px solid var(--success); padding: 6px 12px; font-size: 11px; font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase; margin-top: 5px; width: fit-content; }
+        .mod-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .mod-tab { padding: 8px 16px; background: var(--bg-hover); border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; color: var(--text-muted); transition: 0.2s; }
+        .mod-tab.active { background: var(--accent); color: white; }
+        .mod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+        .mod-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; cursor: pointer; transition: 0.2s; position: relative; }
+        .mod-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .mod-card img { width: 100%; height: 125px; object-fit: cover; border-bottom: 1px solid var(--border-color); background: #000; }
+        .mod-card-body { padding: 12px; }
+        .mod-card-title { font-size: 13px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 6px; color: var(--text-main); }
+        .mod-card-stats { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); }
+        .stars { color: var(--star); letter-spacing: 2px; }
+        .local-mod-card { background: var(--bg-panel); border: 1px dashed var(--border-color); padding: 15px; border-radius: 4px; text-align: center; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+        .modal-content { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 8px; width: 600px; max-width: 90%; display: flex; overflow: hidden; position: relative; }
+        .modal-img { width: 250px; background: #000; }
+        .modal-img img { width: 100%; height: 100%; object-fit: cover; }
+        .modal-info { padding: 25px; flex: 1; display: flex; flex-direction: column; }
+        .modal-close { position: absolute; top: 10px; right: 15px; cursor: pointer; color: var(--text-muted); font-size: 18px; font-weight: bold; }
+        .m-title { font-size: 20px; font-weight: 900; color: var(--text-main); margin-bottom: 5px; }
+        .m-author { font-size: 12px; color: var(--accent); font-weight: bold; margin-bottom: 15px; }
+        .m-stats-row { display: flex; gap: 20px; margin-bottom: 15px; background: var(--bg-hover); padding: 10px; border-radius: 4px; border: 1px solid var(--border-color); }
+        .m-stat { display: flex; flex-direction: column; }
+        .m-stat-val { font-size: 14px; font-weight: bold; color: var(--text-main); }
+        .m-stat-lbl { font-size: 10px; color: var(--text-muted); text-transform: uppercase; }
+        .m-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; flex: 1; overflow-y: auto; max-height: 100px; }
+        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-dark); z-index: 9999; display: flex; justify-content: center; align-items: center; }
+        .login-box { background: var(--bg-panel); border: 1px solid var(--border-color); padding: 30px; border-radius: 6px; text-align: center; max-width: 400px; }
+        .btn-steam-login { background-color: #171a21; color: white; width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #2a475e; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;}
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="login-overlay" id="loginScreen">
+        <div class="login-box">
+            <img src="pzpublisherlogo.png" style="width: 140px; margin-bottom: 20px;" onerror="this.style.display='none'">
+            <h1 style="font-size: 22px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                PZPUBLISHER <span style="font-size: 13px; color: var(--accent); padding: 2px 6px; background: rgba(160, 5, 5, 0.1); border-radius: 4px; border: 1px solid var(--accent);">v1.0.0</span>
+            </h1>
+            <p id="loginText" style="color: var(--text-muted); margin-bottom: 25px;" data-i18n="login_desc"></p>
+            <button class="btn-steam-login" onclick="realSteamLogin()"><img src="steam.png" style="width:20px;" onerror="this.style.display='none'"> <span data-i18n="login_btn"></span></button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modModal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-close" onclick="document.getElementById('modModal').style.display='none'">✕</div>
+            <div class="modal-img"><img src="default_cover.jpg" id="mImg"></div>
+            <div class="modal-info">
+                <div class="m-title" id="mTitle"></div>
+                <div class="m-author" id="mAuthor"></div>
+                <div class="m-stats-row">
+                    <div class="m-stat"><span class="m-stat-val" id="mSubs">0</span><span class="m-stat-lbl" data-i18n="subs"></span></div>
+                    <div class="m-stat"><span class="m-stat-val" id="mSize">0 MB</span><span class="m-stat-lbl" data-i18n="size"></span></div>
+                    <div class="m-stat"><span class="m-stat-val stars" id="mStars">★★★</span><span class="m-stat-lbl" data-i18n="rating"></span></div>
+                </div>
+                <div class="m-desc" id="mDesc"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="brand"><img src="pzpublisherlogo.png" onerror="this.style.display='none'">PZ<span>PUBLISHER</span> <small>v1.0.0</small></div>
+        <div class="nav-items">
+            <div class="nav-item active" onclick="switchTab('publishTab', this)"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM12 2L5 9h4v8h6V9h4l-7-7z"/></svg> <span data-i18n="nav_publish"></span></div>
+            <div class="nav-item" onclick="switchTab('downloadTab', this)"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> <span data-i18n="nav_download"></span></div>
+            <div class="nav-item" onclick="switchTab('installedTab', this)"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg> <span data-i18n="nav_installed"></span></div>
+            <div class="nav-item" onclick="switchTab('myModsTab', this)"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg> <span data-i18n="nav_my_mods"></span></div>
+            <div class="nav-item" onclick="switchTab('settingsTab', this)"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg> <span data-i18n="nav_settings"></span></div>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="topbar">
+            <div class="user-profile">
+                <div class="user-info">
+                    <div class="user-name" id="profileName"></div>
+                    <div class="user-status" id="profileStatus" data-i18n="status_wait"></div>
+                    <button class="logout-btn" onclick="logout()" data-i18n="btn_logout"></button>
+                </div>
+                <img src="default_cover.jpg" class="user-avatar" id="profileAvatar">
+            </div>
+        </div>
+
+        <div class="content-area">
+            
+            <div id="publishTab" class="tab-content active">
+                <h2 data-i18n="nav_publish"></h2>
+                
+                <div class="publish-layout">
+                    <div class="pub-left">
+                        <div class="preview-box" id="btnSelectPreview">
+                            <span class="preview-text" id="previewText">📸 Kapak Resmi Seç<br><small>(Maksimum 1 MB)</small></span>
+                            <img id="previewImg">
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>Modifikasyon Klasörü (İçinde mod.info olmalı)</label>
+                            <div class="settings-row">
+                                <input type="text" id="pubFolderPath" readonly placeholder="" style="font-size: 11px;">
+                                <button class="btn btn-secondary" id="btnSelectFolder" style="padding: 12px;">Klasör Seç</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pub-right">
+                        <div class="form-group">
+                            <label data-i18n="title"></label>
+                            <input type="text" id="pubTitle" placeholder="">
+                        </div>
+                        
+                        <div style="display: flex; gap: 20px;">
+                            <div class="form-group" style="flex:1;">
+                                <label>Modifikasyon Türü (Tag)</label>
+                                <select id="pubType">
+                                    <option value="Map">Map (Harita)</option>
+                                    <option value="Vehicles">Vehicles (Araçlar)</option>
+                                    <option value="Weapons">Weapons (Silahlar)</option>
+                                    <option value="Clothing">Clothing (Kıyafet)</option>
+                                    <option value="Models">Models (Modeller)</option>
+                                    <option value="UI">UI (Arayüz)</option>
+                                    <option value="Multiplayer">Multiplayer (Çok Oyunculu)</option>
+                                    <option value="Traits">Traits (Özellikler)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex:1;">
+                                <label>Erişim Görünürlüğü</label>
+                                <select id="pubVisibility">
+                                    <option value="0">Herkese Açık (Public)</option>
+                                    <option value="1">Sadece Arkadaşlar (Friends Only)</option>
+                                    <option value="2">Gizli (Hidden)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label data-i18n="desc"></label>
+                            <textarea id="pubDesc" placeholder=""></textarea>
+                        </div>
+                        
+                        <div class="pub-action-row">
+                            <button class="btn" style="flex: 1; padding: 15px; font-size: 16px;" id="btnPublishFinal">🚀 İÇERİĞİ STEAM ATÖLYESİNE YÜKLE</button>
+                        </div>
+
+                        <div id="uploadProgressContainer" style="display:none; margin-top: 15px;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                                <span style="font-size:12px; font-weight:bold; color:var(--info);" id="upStatusText">İşlem Başlatılıyor...</span>
+                                <span style="font-size:12px; font-weight:bold; color:var(--text-muted);" id="upPct">0%</span>
+                            </div>
+                            <div class="progress-bar-bg"><div class="progress-bar-fill" id="upBar" style="background-color:var(--info);"></div></div>
+                        </div>
+
+                        <div id="publishStatus" class="status-msg"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="downloadTab" class="tab-content">
+                <h2 data-i18n="nav_download"></h2>
+                <div class="form-group">
+                    <label data-i18n="workshop_link"></label>
+                    <input type="text" id="workshopUrl" placeholder="">
+                    <div class="inline-alert" id="urlAlert" data-i18n="invalid_link"></div>
+                </div>
+                <div class="rich-dl-card" id="richDlCard">
+                    <img src="default_cover.jpg" id="dlImage" class="rich-dl-img">
+                    <div class="rich-dl-info">
+                        <div class="rich-dl-header">
+                            <div class="rich-dl-title" id="dlTitle"></div>
+                            <div class="rich-dl-percent" id="dlPercentage">0%</div>
+                        </div>
+                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="dlProgressBar"></div></div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                            <div class="rich-dl-status" id="dlStatusText"></div>
+                            <div style="font-size: 11px; color: var(--text-muted); font-weight: bold;" id="dlSizeData"></div>
+                        </div>
+                        <div style="font-size: 11px; color: var(--info); font-weight: bold; margin-top: 2px;" id="dlSpeedEta"></div>
+                        <button class="btn-open-folder" id="btnOpenFolder" data-i18n="open_folder"></button>
+                    </div>
+                    <div class="dl-controls" id="dlControls">
+                        <button class="control-btn" id="btnPauseResume"><svg id="iconPause" width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg><svg id="iconPlay" style="display: none;" width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+                        <button class="control-btn cancel" id="btnCancel"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="installedTab" class="tab-content">
+                <h2 data-i18n="nav_installed"></h2>
+                <div class="mod-tabs">
+                    <div class="mod-tab active" id="tabWorkshop" onclick="toggleInstalled('workshop')" data-i18n="tab_ws"></div>
+                    <div class="mod-tab" id="tabLocal" onclick="toggleInstalled('local')" data-i18n="tab_local"></div>
+                    <button class="btn" style="margin-left:auto; font-size:11px; padding:6px 12px;" onclick="loadInstalledMods()" data-i18n="btn_refresh"></button>
+                </div>
+                <div id="loadingStatus" style="color: var(--text-muted); margin-bottom:15px; display:none;"></div>
+                <div class="mod-grid" id="gridWorkshop"></div>
+                <div class="mod-grid" id="gridLocal" style="display:none;"></div>
+            </div>
+
+            <div id="myModsTab" class="tab-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+                    <h2 style="margin-bottom: 0; border: none; padding: 0;" data-i18n="my_mods_title"></h2>
+                    <button class="btn" style="font-size:11px; padding:6px 12px;" onclick="loadMyMods()" data-i18n="btn_refresh"></button>
+                </div>
+                <div id="myModsStatus" style="color: var(--text-muted); margin-bottom:15px; display:none;"></div>
+                <div class="mod-grid" id="gridMyMods"></div>
+            </div>
+
+            <div id="settingsTab" class="tab-content">
+                <h2 data-i18n="nav_settings"></h2>
+                <div class="settings-card">
+                    <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                        <div class="form-group" style="flex:1;"><label data-i18n="set_lang"></label><select id="setLang" onchange="saveSettings()"><option value="tr">Türkçe</option><option value="en">English</option></select></div>
+                        <div class="form-group" style="flex:1;"><label data-i18n="set_theme"></label><select id="setTheme" onchange="saveSettings()"><option value="dark" data-i18n="theme_dark"></option><option value="light" data-i18n="theme_light"></option></select></div>
+                    </div>
+                    <div class="form-group"><label data-i18n="set_pz"></label><div class="settings-row"><input type="text" id="setPzPath" readonly placeholder=""><button class="btn" onclick="selectPath('pz')" data-i18n="btn_browse"></button><button class="btn btn-secondary" onclick="resetPath('pz')" data-i18n="btn_reset"></button></div><p style="font-size: 11px; color: var(--text-muted); margin-top:5px;" data-i18n="set_pz_desc"></p></div>
+                    <div class="form-group"><label data-i18n="set_dl"></label><div class="settings-row"><input type="text" id="setDlPath" readonly placeholder="Belgeler / PZPUBLISHER / Downloads"><button class="btn" onclick="selectPath('dl')" data-i18n="btn_browse"></button><button class="btn btn-secondary" onclick="resetPath('dl')" data-i18n="btn_reset"></button></div></div>
+                    <div class="form-group"><label data-i18n="set_sound"></label><select id="setSound" onchange="saveSettings()" style="width: 200px;"><option value="on" data-i18n="sound_on"></option><option value="off" data-i18n="sound_off"></option></select></div>
+                </div>
+                
+                <div class="settings-card" style="border-color: rgba(0, 255, 157, 0.3);">
+                    <h3 style="margin-bottom: 15px; font-size: 14px; color: var(--success);">Hata Yönetimi ve Kayıtlar</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Program, arka planda meydana gelen hataları işlemlere göre kategorize ederek dosyalara kaydetmektedir.</p>
+                    <button class="btn btn-secondary" onclick="openErrorLogs()">📂 Hata Kayıtlarını (Logs) Görüntüle</button>
+                </div>
+
+                <div class="settings-card" style="border-color: rgba(160, 5, 5, 0.3);"><h3 style="margin-bottom: 15px; font-size: 14px; color: var(--accent);" data-i18n="set_danger"></h3><div class="settings-row"><button class="btn btn-secondary" onclick="clearTempCache()" data-i18n="btn_cache"></button><button class="btn" onclick="forceSteamLogout()" data-i18n="btn_disconnect"></button></div></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+        const fs = require('fs');
+        const path = require('path');
+
+        const i18n = {
+            tr: {
+                login_desc: "İşlemleri gerçekleştirmek için Steam üzerinden giriş yapınız.", login_btn: "Steam ile Giriş Yap",
+                nav_publish: "Yayınla", nav_download: "İndirici", nav_installed: "Kurulu Modlar", nav_settings: "Ayarlar", nav_my_mods: "Atölyem",
+                status_online: "Çevrimiçi", status_wait: "Giriş Bekleniyor", btn_logout: "Çıkış Yap", my_mods_title: "Steam Atölyesi İçeriklerim",
+                select_folder: "Mod Klasörünü Seçiniz", title: "Başlık", desc: "Açıklama", btn_publish: "İÇERİĞİ STEAM ATÖLYESİNE YÜKLE",
+                workshop_link: "Atölye Bağlantı Adresi", invalid_link: "Geçersiz veya eksik bağlantı formatı.", open_folder: "Klasörü Aç",
+                tab_ws: "Atölye Modları", tab_local: "Yerel Modlar", btn_refresh: "Listeyi Güncelle",
+                set_lang: "Dil Tercihi (Language)", set_theme: "Tema Görünümü", theme_dark: "Karanlık (Varsayılan)", theme_light: "Aydınlık",
+                set_pz: "Özel Project Zomboid Kurulum Dizini", btn_browse: "Gözat", btn_reset: "Sıfırla",
+                set_pz_desc: "Oyununuz C: sürücüsü dışındaysa, lütfen 'ProjectZomboid' dizinini manuel olarak belirleyiniz.",
+                set_dl: "Özel İndirme Dizini", set_sound: "Sesli Bildirimler", sound_on: "Açık", sound_off: "Kapalı",
+                set_danger: "Sistem Bakım Araçları", btn_cache: "🧹 Geçici Sistem Belleğini Temizle", btn_disconnect: "🔌 Steam İstemcisi Bağlantısını Kes",
+                subs: "Abone", size: "Dosya Boyutu", rating: "Derecelendirme", fetching: "Atölye verileriniz sunucudan sorgulanıyor...", no_mods: "Atölyenizde yayımlanmış Project Zomboid modifikasyonu bulunmamaktadır."
+            },
+            en: {
+                login_desc: "Please authenticate via Steam to manage modifications.", login_btn: "Login via Steam",
+                nav_publish: "Publish", nav_download: "Downloader", nav_installed: "Installed Addons", nav_settings: "Settings", nav_my_mods: "My Workshop",
+                status_online: "Online", status_wait: "Waiting for Authentication", btn_logout: "Sign Out", my_mods_title: "My Workshop Items",
+                select_folder: "Select Mod Directory", title: "Title", desc: "Description", btn_publish: "UPLOAD CONTENT TO STEAM",
+                workshop_link: "Workshop Item URL", invalid_link: "Invalid or incomplete URL format.", open_folder: "Open Directory",
+                tab_ws: "Workshop Mods", tab_local: "Local Mods", btn_refresh: "Refresh List",
+                set_lang: "Language", set_theme: "Theme Preference", theme_dark: "Dark (Default)", theme_light: "Light",
+                set_pz: "Custom Project Zomboid Installation Path", btn_browse: "Browse", btn_reset: "Reset",
+                set_pz_desc: "If the game is installed outside the C: drive, please define the 'ProjectZomboid' directory manually.",
+                set_dl: "Custom Download Path", set_sound: "Audio Notifications", sound_on: "Enabled", sound_off: "Disabled",
+                set_danger: "System Maintenance Tools", btn_cache: "🧹 Clear Temporary Cache", btn_disconnect: "🔌 Disconnect Steam Account",
+                subs: "Subscribers", size: "File Size", rating: "Rating", fetching: "Scanning your workshop contents...", no_mods: "No Project Zomboid modifications found in your workshop."
+            }
+        };
+
+        let appSettings = { theme: 'dark', lang: 'tr', pzPath: '', dlPath: '', sound: 'on' };
+
+        window.onload = () => {
+            const savedUser = localStorage.getItem('steamUser');
+            if (savedUser) {
+                const user = JSON.parse(savedUser);
+                document.getElementById('profileName').innerText = user.name; document.getElementById('profileAvatar').src = user.avatar;
+                document.getElementById('loginScreen').style.display = 'none';
+            }
+            const savedSettings = localStorage.getItem('pz_settings');
+            if(savedSettings) { appSettings = { ...appSettings, ...JSON.parse(savedSettings) }; }
+            
+            document.getElementById('setLang').value = appSettings.lang; document.getElementById('setTheme').value = appSettings.theme;
+            document.getElementById('setSound').value = appSettings.sound;
+            if(appSettings.pzPath) document.getElementById('setPzPath').value = appSettings.pzPath;
+            if(appSettings.dlPath) document.getElementById('setDlPath').value = appSettings.dlPath;
+            applySettings();
+            
+            setTimeout(loadInstalledMods, 500);
+        };
+
+        function applySettings() {
+            if (appSettings.theme === 'light') document.body.classList.add('light-theme'); else document.body.classList.remove('light-theme');
+            const langData = i18n[appSettings.lang];
+            document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if(langData[key]) el.innerText = langData[key]; });
+            
+            const statusEl = document.getElementById('profileStatus');
+            if(document.getElementById('loginScreen').style.display === 'none') { 
+                statusEl.innerText = langData.status_online;
+                statusEl.style.color = "var(--success)";
+            } else { 
+                statusEl.innerText = langData.status_wait;
+                statusEl.style.color = "var(--accent)";
+            }
+        }
+
+        function saveSettings() {
+            appSettings.lang = document.getElementById('setLang').value; appSettings.theme = document.getElementById('setTheme').value;
+            appSettings.sound = document.getElementById('setSound').value; localStorage.setItem('pz_settings', JSON.stringify(appSettings)); applySettings();
+        }
+
+        function openErrorLogs() { ipcRenderer.send('open-logs-folder'); }
+
+        async function selectPath(type) {
+            const folderPath = await ipcRenderer.invoke('select-folder');
+            if(folderPath) {
+                if(type === 'pz') { appSettings.pzPath = folderPath; document.getElementById('setPzPath').value = folderPath; }
+                if(type === 'dl') { appSettings.dlPath = folderPath; document.getElementById('setDlPath').value = folderPath; }
+                saveSettings(); loadInstalledMods();
+            }
+        }
+        function resetPath(type) {
+            if(type === 'pz') { appSettings.pzPath = ""; document.getElementById('setPzPath').value = ""; }
+            if(type === 'dl') { appSettings.dlPath = ""; document.getElementById('setDlPath').value = ""; }
+            saveSettings();
+        }
+
+        async function clearTempCache() { const btn = event.target; btn.innerText = "⏳ İşlem Devam Ediyor..."; await ipcRenderer.invoke('clear-cache'); setTimeout(() => { btn.innerText = appSettings.lang === 'tr' ? "✔ İşlem Tamamlandı." : "✔ Action Completed."; setTimeout(() => { applySettings(); }, 2000); }, 500); }
+        function forceSteamLogout() { localStorage.removeItem('steamUser'); window.location.reload(); }
+
+        async function realSteamLogin() {
+            document.getElementById('loginText').innerText = "Bağlantı sağlanıyor, lütfen bekleyiniz...";
+            const res = await ipcRenderer.invoke('steam-login');
+            if (res.success) {
+                localStorage.setItem('steamUser', JSON.stringify({ name: res.name, avatar: res.avatar, steamId: res.steamId }));
+                document.getElementById('profileName').innerText = res.name; document.getElementById('profileAvatar').src = res.avatar;
+                applySettings(); document.getElementById('loginScreen').style.display = 'none';
+            } else document.getElementById('loginText').innerText = "Oturum açma işlemi gerçekleştirilemedi.";
+        }
+        function logout() { localStorage.removeItem('steamUser'); document.getElementById('loginScreen').style.display = 'flex'; applySettings(); }
+        
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active'); el.classList.add('active');
+            if (tabId === 'installedTab') loadInstalledMods();
+            if (tabId === 'myModsTab') loadMyMods();
+        }
+
+        function playSound(type) { if(appSettings.sound === 'off') return; try { const ctx = new (window.AudioContext)(); const osc = ctx.createOscillator(); const gain = ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.type = 'sine'; if(type==='start'){ osc.frequency.setValueAtTime(600, ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime+0.1); gain.gain.setValueAtTime(0.1, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime+0.2); osc.start(); osc.stop(ctx.currentTime+0.2); } else { const freqs=[523.25,659.25,783.99,1046.50]; freqs.forEach((f,i)=>{const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,ctx.currentTime+i*0.1);g.gain.linearRampToValueAtTime(0.1,ctx.currentTime+i*0.1+0.05);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+i*0.1+0.6);o.start(ctx.currentTime+i*0.1);o.stop(ctx.currentTime+i*0.1+0.6);}); } } catch(e){} }
+
+        let currentDownloadPath="", isPaused=false, activeDownloadData=null, typingTimer, simInterval;
+        const inputUrl=document.getElementById('workshopUrl'), richCard=document.getElementById('richDlCard'), dlBar=document.getElementById('dlProgressBar');
+        inputUrl.addEventListener('input', () => { clearTimeout(typingTimer); document.getElementById('urlAlert').style.display='none'; if(inputUrl.value.trim()==="") { richCard.style.display='none'; return; } typingTimer = setTimeout(() => { if(inputUrl.value.includes('id=')) startFullDownloadProcess(inputUrl.value); else { document.getElementById('urlAlert').style.display='block'; richCard.style.display='none'; } }, 500); });
+        function parseMB(str) { let v=parseFloat((str||"").replace(/[^0-9.]/g,'')); if(str&&str.includes('GB')) v*=1024; return isNaN(v)?25.0:v; }
+        
+        ipcRenderer.on('download-progress', (event, data) => { 
+            if (isPaused) return; 
+            const statusTxt = document.getElementById('dlStatusText'); 
+            if (data.includes("Downloading item")) statusTxt.innerText = "İndirme işlemi gerçekleştiriliyor..."; 
+            else if (data.includes("Update tool")) statusTxt.innerText = "Altyapı güncelleniyor..."; 
+            else if (data.includes("Success. Downloaded")) statusTxt.innerText = "Dosyalar klasöre aktarılıyor..."; 
+        });
+
+        // Steam Durumunu Gerçek Zamanlı Güncelleme - Alp İçin Onarıldı
+        ipcRenderer.on('steam-status', (event, status) => {
+            const statusEl = document.getElementById('profileStatus');
+            const langData = i18n[appSettings.lang];
+            if (status.online) {
+                statusEl.innerText = langData.status_online;
+                statusEl.style.color = "var(--success)";
+            } else {
+                statusEl.innerText = langData.status_wait;
+                statusEl.style.color = "var(--accent)";
+            }
+        });
+
+        async function startFullDownloadProcess(url) {
+            playSound('start'); richCard.style.display='flex'; dlBar.style.width='5%'; dlBar.style.backgroundColor='var(--accent)'; document.getElementById('dlPercentage').innerText='5%'; document.getElementById('dlTitle').innerText="Veriler Analiz Ediliyor..."; document.getElementById('dlStatusText').innerText="Sunucu bilgileri alınıyor..."; document.getElementById('dlStatusText').style.color="var(--text-muted)"; document.getElementById('dlSpeedEta').innerText=""; document.getElementById('dlSpeedEta').style.color="var(--info)"; clearInterval(simInterval); isPaused=false; document.getElementById('btnOpenFolder').style.display='none'; document.getElementById('dlControls').style.display='flex';
+            try {
+                const info = await ipcRenderer.invoke('fetch-mod-info', url); if(!info.success) throw new Error("Atölye bağlantısı doğrulanamadı.");
+                activeDownloadData = info; document.getElementById('dlImage').src = info.imageUrl; document.getElementById('dlTitle').innerText = info.title;
+                const totalMB = parseMB(info.fileSize); let dMB = 0, speed = 0;
+                simInterval = setInterval(() => { if(isPaused) return; speed = Math.random()*3+1.5; dMB += speed/10; if(dMB >= totalMB*0.95) { dMB = totalMB*0.95; speed = 0; } let pct = Math.floor((dMB/totalMB)*100); dlBar.style.width=`${pct}%`; document.getElementById('dlPercentage').innerText=`${pct}%`; document.getElementById('dlSizeData').innerText=`${dMB.toFixed(2)} MB / ${totalMB.toFixed(2)} MB`; document.getElementById('dlSpeedEta').innerText = speed>0 ? `${speed.toFixed(1)} MB/s` : "İşleniyor..."; }, 100);
+                
+                const res = await ipcRenderer.invoke('start-download', info.ids, info.mainId, info.isCollection, appSettings.dlPath); 
+                clearInterval(simInterval);
+                
+                if(res.success) { playSound('success'); dlBar.style.width='100%'; document.getElementById('dlPercentage').innerText='100%'; document.getElementById('dlStatusText').innerText="İşlem Tamamlandı."; dlBar.classList.add('success'); currentDownloadPath = res.path; document.getElementById('btnOpenFolder').style.display='block'; document.getElementById('dlControls').style.display='none'; document.getElementById('dlSpeedEta').innerText = "Dosya kullanıma hazır."; } else if (res.cancelled) { document.getElementById('dlStatusText').innerText="İşlem Kullanıcı Tarafından İptal Edildi."; dlBar.style.backgroundColor="#555"; document.getElementById('dlSpeedEta').innerText=""; } else throw new Error(res.error || "Sunucu ile bağlantı kesildi.");
+            } catch (error) { clearInterval(simInterval); document.getElementById('dlStatusText').innerText="HATA MEYDANA GELDİ."; document.getElementById('dlStatusText').style.color="#ff4d4d"; document.getElementById('dlSpeedEta').innerText=error.message; document.getElementById('dlSpeedEta').style.color="#ff4d4d"; dlBar.style.backgroundColor="#ff4d4d"; document.getElementById('dlControls').style.display='none'; }
+        }
+        document.getElementById('btnPauseResume').addEventListener('click', () => { isPaused=!isPaused; if(isPaused) ipcRenderer.send('cancel-download'); else ipcRenderer.invoke('start-download', activeDownloadData.ids, activeDownloadData.mainId, activeDownloadData.isCollection, appSettings.dlPath); });
+        document.getElementById('btnCancel').addEventListener('click', () => { ipcRenderer.send('cancel-download'); clearInterval(simInterval); richCard.style.display='none'; inputUrl.value=""; });
+        document.getElementById('btnOpenFolder').addEventListener('click', () => { if(currentDownloadPath) ipcRenderer.send('open-folder', currentDownloadPath); });
+
+        function toggleInstalled(type) { document.getElementById('tabWorkshop').classList.remove('active'); document.getElementById('tabLocal').classList.remove('active'); document.getElementById('gridWorkshop').style.display='none'; document.getElementById('gridLocal').style.display='none'; if(type==='workshop') { document.getElementById('tabWorkshop').classList.add('active'); document.getElementById('gridWorkshop').style.display='grid'; } else { document.getElementById('tabLocal').classList.add('active'); document.getElementById('gridLocal').style.display='grid'; } }
+        let isFetchingMods = false;
+        
+        async function loadInstalledMods() {
+            if (isFetchingMods) return; isFetchingMods = true;
+            const status = document.getElementById('loadingStatus'), gridWs = document.getElementById('gridWorkshop'), gridLoc = document.getElementById('gridLocal');
+            status.style.display='block'; status.innerText="Dizinler taranıyor, lütfen bekleyiniz..."; gridWs.innerHTML=''; gridLoc.innerHTML='';
+            
+            const res = await ipcRenderer.invoke('get-installed-mods', appSettings.pzPath);
+            if(!res.success) { status.innerText=res.error; isFetchingMods = false; return; }
+
+            if (res.foundPath && (!appSettings.pzPath || appSettings.pzPath === "")) {
+                document.getElementById('setPzPath').value = res.foundPath;
+            }
+
+            const txtLoc = appSettings.lang === 'tr' ? "Yerel Modlar" : "Local Mods"; const txtWs = appSettings.lang === 'tr' ? "Atölye Modları" : "Workshop Mods";
+            document.getElementById('tabLocal').innerText = `${txtLoc} (${res.localMods.length})`;
+            let locHtml = ''; res.localMods.forEach(m => locHtml += `<div class="local-mod-card"><span>${m.filename}</span></div>`); gridLoc.innerHTML = locHtml;
+            document.getElementById('tabWorkshop').innerText = `${txtWs} (${res.workshopMods.length})`;
+            
+            if(res.workshopMods.length===0) { status.innerText="Sistemde herhangi bir modifikasyon dosyası tespit edilemedi."; isFetchingMods = false; return; }
+            
+            let wsHtml = ''; res.workshopMods.forEach(m => { wsHtml += `<div class="mod-card" id="card-${m.id}"><img src="default_cover.jpg" id="img-${m.id}"><div class="mod-card-body"><div class="mod-card-title" id="title-${m.id}">...</div><div class="mod-card-stats"><span id="subs-${m.id}">--</span><span class="stars" id="stars-${m.id}">★★★</span></div></div></div>`; }); gridWs.innerHTML = wsHtml;
+            await Promise.all(res.workshopMods.map(async (mod) => {
+                const info = await ipcRenderer.invoke('fetch-detailed-mod-info', mod.id);
+                if(info.success) { const img = document.getElementById(`img-${mod.id}`); if(img) img.src = info.imageUrl; const title = document.getElementById(`title-${mod.id}`); if(title) title.innerText = info.title; const subs = document.getElementById(`subs-${mod.id}`); if(subs) subs.innerText = `${info.subs}`; const stars = document.getElementById(`stars-${mod.id}`); if(stars) stars.innerText = "★".repeat(parseInt(info.stars)||0) + "☆".repeat(5-(parseInt(info.stars)||0)); const card = document.getElementById(`card-${mod.id}`); if(card) card.onclick = () => openModal(info); } 
+                else { const title = document.getElementById(`title-${mod.id}`); if(title) title.innerText = `ID: ${mod.id}`; }
+            }));
+            status.style.display='none'; isFetchingMods = false;
+        }
+
+        let isFetchingMyMods = false;
+        async function loadMyMods() {
+            if (isFetchingMyMods) return;
+            const savedUser = localStorage.getItem('steamUser'); if (!savedUser) return;
+            const user = JSON.parse(savedUser); if (!user.steamId) return;
+            isFetchingMyMods = true; const status = document.getElementById('myModsStatus'); const grid = document.getElementById('gridMyMods');
+            status.style.display = 'block'; status.innerText = i18n[appSettings.lang].fetching; grid.innerHTML = '';
+            const res = await ipcRenderer.invoke('fetch-my-mods', user.steamId);
+            if (!res.success) { status.innerText = res.error; isFetchingMyMods = false; return; }
+            if (res.ids.length === 0) { status.innerText = i18n[appSettings.lang].no_mods; isFetchingMyMods = false; return; }
+            let html = ''; res.ids.forEach(id => { html += `<div class="mod-card" id="mycard-${id}"><img src="default_cover.jpg" id="myimg-${id}"><div class="mod-card-body"><div class="mod-card-title" id="mytitle-${id}">Veriler Çekiliyor...</div><div class="mod-card-stats"><span id="mysubs-${id}">--</span><span class="stars" id="mystars-${id}">★★★</span></div></div></div>`; }); grid.innerHTML = html;
+            await Promise.all(res.ids.map(async (id) => {
+                const info = await ipcRenderer.invoke('fetch-detailed-mod-info', id);
+                if (info.success) { const img = document.getElementById(`myimg-${id}`); if (img) img.src = info.imageUrl; const title = document.getElementById(`mytitle-${id}`); if (title) title.innerText = info.title; const subs = document.getElementById(`mysubs-${id}`); if (subs) subs.innerText = `${info.subs}`; const stars = document.getElementById(`mystars-${id}`); if (stars) stars.innerText = "★".repeat(parseInt(info.stars)||0) + "☆".repeat(5-(parseInt(info.stars)||0)); const card = document.getElementById(`mycard-${id}`); if (card) card.onclick = () => openModal(info); } 
+                else { const title = document.getElementById(`mytitle-${id}`); if (title) title.innerText = `ID: ${id}`; }
+            }));
+            status.style.display = 'none'; isFetchingMyMods = false;
+        }
+
+        function openModal(info) {
+            document.getElementById('mImg').src = info.imageUrl; 
+            document.getElementById('mTitle').innerText = info.title;
+            document.getElementById('mAuthor').innerText = `${appSettings.lang === 'tr' ? 'Geliştirici' : 'Author'}: ${info.author}`; 
+            document.getElementById('mSubs').innerText = info.subs;
+            document.getElementById('mSize').innerText = info.fileSize; 
+            document.getElementById('mStars').innerText = "★".repeat(parseInt(info.stars)||0);
+            document.getElementById('mDesc').innerText = info.desc; 
+            document.getElementById('modModal').style.display = 'flex';
+        }
+
+        function closeModal(e) { 
+            if(e.target.id === 'modModal') document.getElementById('modModal').style.display = 'none'; 
+        }
+
+        function openSteamLink(itemId) {
+            require('electron').shell.openExternal(`https://steamcommunity.com/sharedfiles/filedetails/?id=${itemId}`);
+        }
+
+        let selectedFolderPath = "";
+        let selectedPreviewImage = "";
+
+        document.getElementById('btnSelectPreview').addEventListener('click', async () => {
+            const res = await ipcRenderer.invoke('select-image');
+            if (res && res.error) alert("SİSTEM UYARISI:\n\n" + res.error);
+            else if (res && res.path) {
+                selectedPreviewImage = res.path;
+                document.getElementById('previewImg').src = res.path;
+                document.getElementById('previewImg').style.display = 'block';
+                document.getElementById('previewText').style.display = 'none';
+            }
+        });
+
+        document.getElementById('btnSelectFolder').addEventListener('click', async () => {
+            const folderPath = await ipcRenderer.invoke('select-folder');
+            if (folderPath) {
+                const validation = await ipcRenderer.invoke('validate-folder', folderPath);
+                if (!validation.valid) {
+                    alert("SİSTEM UYARISI:\n\n" + validation.error);
+                    return;
+                }
+                selectedFolderPath = folderPath;
+                document.getElementById('pubFolderPath').value = folderPath;
+            }
+        });
+
+        function resetPublishTab() {
+            document.getElementById('pubTitle').value = '';
+            document.getElementById('pubDesc').value = '';
+            document.getElementById('pubVisibility').value = '0';
+            document.getElementById('pubType').value = 'Map';
+            document.getElementById('pubFolderPath').value = '';
+            selectedFolderPath = '';
+            selectedPreviewImage = '';
+            document.getElementById('previewImg').src = '';
+            document.getElementById('previewImg').style.display = 'none';
+            document.getElementById('previewText').style.display = 'block';
+            document.getElementById('uploadProgressContainer').style.display = 'none';
+            document.getElementById('publishStatus').style.display = 'none';
+        }
+
+        let uploadInterval;
+
+        document.getElementById('btnPublishFinal').addEventListener('click', async () => {
+            const statusDiv = document.getElementById('publishStatus');
+            const progressContainer = document.getElementById('uploadProgressContainer');
+            const upBar = document.getElementById('upBar');
+            const upPct = document.getElementById('upPct');
+            const upStatusText = document.getElementById('upStatusText');
+            
+            statusDiv.style.display = 'block'; 
+            statusDiv.innerHTML = "";
+            clearInterval(uploadInterval);
+            
+            if (!selectedFolderPath || selectedFolderPath.trim() === "") { 
+                statusDiv.innerText = "HATA: Lütfen işleme devam etmek için geçerli bir modifikasyon dizini seçiniz."; 
+                statusDiv.style.borderColor = "red"; 
+                progressContainer.style.display = 'none';
+                return; 
+            }
+
+            const title = document.getElementById('pubTitle').value || 'İsimsiz İçerik';
+            const desc = document.getElementById('pubDesc').value || 'PZPUBLISHER arayüzü aracılığıyla Steam Atölyesine yüklenmiştir.';
+            const visibility = document.getElementById('pubVisibility').value;
+            const type = document.getElementById('pubType').value; 
+            
+            statusDiv.style.display = 'none';
+            progressContainer.style.display = 'block';
+            upBar.style.width = '10%';
+            upBar.style.backgroundColor = 'var(--info)';
+            upPct.innerText = '10%';
+            upStatusText.innerText = 'Dosyalar hazırlanıyor ve Steam ile bağlantı kuruluyor...';
+            upStatusText.style.color = 'var(--info)';
+            
+            let p = 10;
+            uploadInterval = setInterval(() => {
+                if(p < 90) {
+                    p += Math.floor(Math.random() * 5) + 1;
+                    if(p > 90) p = 90;
+                    upBar.style.width = p + '%';
+                    upPct.innerText = p + '%';
+                    if (p > 50) upStatusText.innerText = 'Aktarım sağlanıyor, lütfen bekleyiniz...';
+                }
+            }, 500);
+
+            const uploadRes = await ipcRenderer.invoke('upload-to-workshop', {
+                folderPath: selectedFolderPath,
+                title: title,
+                desc: desc,
+                visibility: visibility,
+                type: type,
+                previewImg: selectedPreviewImage
+            });
+
+            clearInterval(uploadInterval);
+
+            if(uploadRes.success) {
+                upBar.style.width = '100%';
+                upPct.innerText = '100%';
+                upBar.style.backgroundColor = 'var(--success)';
+                upStatusText.innerText = 'İşlem Başarıyla Tamamlandı.';
+                upStatusText.style.color = 'var(--success)';
+                
+                playSound('success');
+                statusDiv.style.display = 'block';
+                statusDiv.innerHTML = `✅ İŞLEM BAŞARILI: İlgili içerik Steam Atölyesi sunucularına aktarılmıştır.<br><a href="#" onclick="openSteamLink('${uploadRes.itemId}')" style="color: var(--success); text-decoration: underline; font-weight: bold; margin-top: 5px; display: inline-block;">İçeriği Web Tarayıcısı Üzerinden Görüntülemek İçin Tıklayınız.</a>`;
+                statusDiv.style.borderColor = "var(--success)"; 
+                
+                setTimeout(() => { resetPublishTab(); }, 3000);
+
+            } else {
+                upBar.style.backgroundColor = 'red';
+                upStatusText.innerText = 'İşlem Başarısız Oldu.';
+                upStatusText.style.color = 'red';
+                
+                statusDiv.style.display = 'block';
+                statusDiv.innerText = "HATA BİLDİRİMİ: " + uploadRes.error;
+                statusDiv.style.borderColor = "red";
+            }
+        });
+    </script>
+</body>
+</html>

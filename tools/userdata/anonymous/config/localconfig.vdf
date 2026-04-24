@@ -1,0 +1,23 @@
+"UserLocalConfigStore"
+{
+	"AppInfoChangeNumber"		"34528364"
+	"depots"
+	{
+		"108600"
+		{
+			"CDN"
+			{
+				"edgenext.cdn.steampipe.steamcontent.com"
+				{
+					"token"		""
+					"Expires"		"1773937328"
+				}
+				"steampipe.akamaized.net"
+				{
+					"token"		""
+					"Expires"		"1773936373"
+				}
+			}
+		}
+	}
+}

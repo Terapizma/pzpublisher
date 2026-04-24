@@ -1,0 +1,22 @@
+
+
+[2026-03-19 16:06:04] Client version: 1773426366
+[2026-03-19 16:06:04] Loading workshop items for 0 installed apps for user [a:1:133226779]:
+[2026-03-19 16:06:11] [AppID 108600] Loaded workshop items in "c:\users\monster\documents\pzpublisher\temp\steamapps\workshop" (0 installed, 0 needed)
+[2026-03-19 16:06:11] [AppID 108600] Download item 3684254299 requested by app
+[2026-03-19 16:06:11] [AppID 108600] Starting Workshop download job (requested item 3684254299 )
+[2026-03-19 16:06:11] [AppID 108600] Detected workshop change (latest from server) : changed cached item 3684254299, new manifest 7995175187815564421
+[2026-03-19 16:06:20] [AppID 108600] Download item 3684254299 result : OK
+[2026-03-19 16:06:20] [AppID 108600] Finished Workshop download job : No Error
+[2026-03-19 16:06:20] [AppID 108600] Updating workshop item details failed with Failure
+
+
+[2026-03-19 16:22:06] Client version: 1773426366
+[2026-03-19 16:22:06] Loading workshop items for 0 installed apps for user [a:1:312643671]:
+[2026-03-19 16:22:07] [AppID 108600] Loaded workshop items in "c:\users\monster\documents\pzpublisher\temp\steamapps\workshop" (1 installed, 1 needed)
+[2026-03-19 16:22:07] [AppID 108600] Download item 3687353319 requested by app
+[2026-03-19 16:22:07] [AppID 108600] Starting Workshop download job (requested item 3687353319 )
+[2026-03-19 16:22:08] [AppID 108600] Detected workshop change (latest from server) : changed cached item 3687353319, new manifest 6784203911943123132
+[2026-03-19 16:22:16] [AppID 108600] Download item 3687353319 result : OK
+[2026-03-19 16:22:16] [AppID 108600] Finished Workshop download job : No Error
+[2026-03-19 16:22:16] [AppID 108600] Updating workshop item details failed with Failure

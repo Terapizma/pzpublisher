@@ -1,0 +1,62 @@
+
+
+[2026-03-19 16:06:04] Client version: 1773426366
+[2026-03-19 16:06:04] Loaded 0 apps from install folder "c:\users\monster\documents\pzpublisher\temp\steamapps\appmanifest_*.acf".
+[2026-03-19 16:06:04] Triggered async write of Steam library folders configuration (1 libraries).
+[2026-03-19 16:06:11] AppID 108600 scheduler update : Priority First, not played for 1773925571 seconds, update disabled for 0 seconds
+[2026-03-19 16:06:11] AppID 108600 Workshop update changed : Running Update,
+[2026-03-19 16:06:11] AppID 108600 Workshop update changed : Running Update,Reconfiguring,
+[2026-03-19 16:06:12] Got 2 download sources and 0 caching proxies via ContentServerDirectoryService::BYieldingGetServersForSteamPipe (CellID 189 / Launcher 3)
+[2026-03-19 16:06:12] Moving to source priority class '2'
+[2026-03-19 16:06:12] Created download interface of type 'CDN' (2) to host edgenext.cdn.steampipe.steamcontent.com (edgenext.cdn.steampipe.steamcontent.com)
+[2026-03-19 16:06:12] Created download interface of type 'CDN' (2) to host steampipe.akamaized.net (steampipe.akamaized.net)
+[2026-03-19 16:06:13] HTTP (CDN,29) - edgenext.cdn.steampipe.steamcontent.com (0.0.0.0:0 / 0.0.0.0:0, host: edgenext.cdn.steampipe.steamcontent.com): AuthenticateDepotID (108600) - Success!
+[2026-03-19 16:06:13] HTTP/2 available
+[2026-03-19 16:06:13] Created ipv4-only http client
+[2026-03-19 16:06:13] HTTP (CDN,29) - edgenext.cdn.steampipe.steamcontent.com (143.14.15.118:80 / 143.14.15.118:80, host: edgenext.cdn.steampipe.steamcontent.com): edgenext.cdn.steampipe.steamcontent.com/depot/108600/manifest/7995175187815564421/5/5955766461610829694 - received 200 (OK) HTTP response
+[2026-03-19 16:06:13] AppID 108600 Workshop update changed : Running Update,
+[2026-03-19 16:06:13] AppID 108600 Workshop update changed : Running Update,Preallocating,
+[2026-03-19 16:06:13] AppID 108600 preallocated 11 files (4 MB) 
+[2026-03-19 16:06:13] AppID 108600 Workshop update changed : Running Update,
+[2026-03-19 16:06:13] AppID 108600 update started : download 0/7769984, store 0/0, reuse 0/0, delta 0/0, stage 0/17546427 
+[2026-03-19 16:06:13] AppID 108600 Workshop update changed : Running Update,Downloading,Staging,
+[2026-03-19 16:06:13] Downloading 159 chunks for depot 108600 (7995175187815564421)
+[2026-03-19 16:06:14] HTTP (CDN,11) - steampipe.akamaized.net (0.0.0.0:0 / 0.0.0.0:0, host: steampipe.akamaized.net): AuthenticateDepotID (108600) - Success!
+[2026-03-19 16:06:15] HTTPS (CDN,11) - steampipe.akamaized.net (23.196.236.10:443 / 23.196.236.10:443, host: steampipe.akamaized.net): Negotiated HTTP/2
+[2026-03-19 16:06:20] AppID 108600 Workshop update changed : Running Update,
+[2026-03-19 16:06:20] AppID 108600 Workshop update changed : Running Update,Committing,
+[2026-03-19 16:06:20] AppID 108600 starting commit from "c:\users\monster\documents\pzpublisher\temp\steamapps\workshop/downloads/108600" to "c:\users\monster\documents\pzpublisher\temp\steamapps\workshop/content/108600" : 352 updated, 0 moved, 0 deleted files
+[2026-03-19 16:06:20] AppID 108600 Workshop update changed : Running Update,
+[2026-03-19 16:06:20] AppID 108600 Workshop update changed : None
+[2026-03-19 16:06:20] AppID 108600 scheduler finished : removed from schedule (result No Error, state 0x0) 
+[2026-03-19 16:06:20] HTTP/2 (CDN,11) - steampipe.akamaized.net (23.196.236.10:443 / 23.196.236.10:443, host: steampipe.akamaized.net): Closing connection
+[2026-03-19 16:06:20] HTTP (CDN,29) - edgenext.cdn.steampipe.steamcontent.com (143.14.15.118:80 / 143.14.15.118:80, host: edgenext.cdn.steampipe.steamcontent.com): Closing connection
+
+
+[2026-03-19 16:22:06] Client version: 1773426366
+[2026-03-19 16:22:06] Loaded 0 apps from install folder "c:\users\monster\documents\pzpublisher\temp\steamapps\appmanifest_*.acf".
+[2026-03-19 16:22:06] Triggered async write of Steam library folders configuration (1 libraries).
+[2026-03-19 16:22:07] AppID 108600 scheduler update : Priority First, not played for 1773926527 seconds, update disabled for 0 seconds
+[2026-03-19 16:22:07] AppID 108600 Workshop update changed : Running Update,
+[2026-03-19 16:22:07] AppID 108600 Workshop update changed : Running Update,Reconfiguring,
+[2026-03-19 16:22:08] Got 2 download sources and 0 caching proxies via ContentServerDirectoryService::BYieldingGetServersForSteamPipe (CellID 189 / Launcher 3)
+[2026-03-19 16:22:08] Moving to source priority class '2'
+[2026-03-19 16:22:08] Created download interface of type 'CDN' (2) to host edgenext.cdn.steampipe.steamcontent.com (edgenext.cdn.steampipe.steamcontent.com)
+[2026-03-19 16:22:09] HTTP (CDN,29) - edgenext.cdn.steampipe.steamcontent.com (0.0.0.0:0 / 0.0.0.0:0, host: edgenext.cdn.steampipe.steamcontent.com): AuthenticateDepotID (108600) - Success!
+[2026-03-19 16:22:09] HTTP/2 available
+[2026-03-19 16:22:09] Created ipv4-only http client
+[2026-03-19 16:22:09] HTTP (CDN,29) - edgenext.cdn.steampipe.steamcontent.com (151.242.228.110:80 / 151.242.228.110:80, host: edgenext.cdn.steampipe.steamcontent.com): edgenext.cdn.steampipe.steamcontent.com/depot/108600/manifest/6784203911943123132/5/14790918759564372147 - received 200 (OK) HTTP response
+[2026-03-19 16:22:09] AppID 108600 Workshop update changed : Running Update,
+[2026-03-19 16:22:09] AppID 108600 Workshop update changed : Running Update,Preallocating,
+[2026-03-19 16:22:09] AppID 108600 preallocated 1 files (0 MB) 
+[2026-03-19 16:22:09] AppID 108600 Workshop update changed : Running Update,
+[2026-03-19 16:22:09] AppID 108600 update started : download 0/4444064, store 0/0, reuse 0/0, delta 0/0, stage 0/9197178 
+[2026-03-19 16:22:09] AppID 108600 Workshop update changed : Running Update,Downloading,Staging,
+[2026-03-19 16:22:09] Downloading 148 chunks for depot 108600 (6784203911943123132)
+[2026-03-19 16:22:16] AppID 108600 Workshop update changed : Running Update,
+[2026-03-19 16:22:16] AppID 108600 Workshop update changed : Running Update,Committing,
+[2026-03-19 16:22:16] AppID 108600 starting commit from "c:\users\monster\documents\pzpublisher\temp\steamapps\workshop/downloads/108600" to "c:\users\monster\documents\pzpublisher\temp\steamapps\workshop/content/108600" : 187 updated, 0 moved, 0 deleted files
+[2026-03-19 16:22:16] AppID 108600 Workshop update changed : Running Update,
+[2026-03-19 16:22:16] AppID 108600 Workshop update changed : None
+[2026-03-19 16:22:16] AppID 108600 scheduler finished : removed from schedule (result No Error, state 0x0) 
+[2026-03-19 16:22:16] HTTP (CDN,29) - edgenext.cdn.steampipe.steamcontent.com (151.242.228.110:80 / 151.242.228.110:80, host: edgenext.cdn.steampipe.steamcontent.com): Closing connection

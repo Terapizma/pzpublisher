@@ -1,0 +1,19 @@
+{
+  "name": "pzpublisher",
+  "version": "1.0.0",
+  "description": "Project Zomboid Workshop Tool",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack-win": "electron-packager . PZPUBLISHER --platform=win32 --arch=x64 --out=dist --overwrite"
+  },
+  "author": "Alp",
+  "license": "MIT",
+  "dependencies": {
+    "steamworks.js": "^0.8.3"
+  },
+  "devDependencies": {
+    "electron": "28.2.0",
+    "electron-packager": "^17.1.2"
+  }
+}
