@@ -10,7 +10,7 @@
 
 Uygulamayı kullanmaya başlamak için aşağıdaki butona tıklayarak en son sürüm kurulum dosyasını indirebilirsiniz:
 
-[![İndir PZPUBLISHER](https://img.shields.io/badge/PZPUBLISHER-Hemen_İndir_(v1.0.0)-brightgreen?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Terapizma/pzpublisher/releases/download/PZPUBLISHER-v1.0.0/PZPUBLISHER_Setup.exe)
+[![İndir PZPUBLISHER](https://img.shields.io/badge/PZPUBLISHER-Hemen_İndir_(v1.1.0)-brightgreen?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Terapizma/pzpublisher/releases/download/PZPUBLISHER-v1.1.0/PZPUBLISHER_Setup.exe)
 ---
 
 ## 📖 Hikayemiz & Vizyon
