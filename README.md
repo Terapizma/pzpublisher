@@ -2,7 +2,7 @@
 
 > *"Say goodbye to clunky command lines and complex file paths. A modern, fast, and seamless solution for the Project Zomboid modding community."*
 
-[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)]()
+[![Version](https://img.shields.io/badge/Version-1.1.0-blue.svg)]()
 [![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)]()
 
